@@ -1,0 +1,9 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        title Test page
+    body
+        h1 Localised versions of #[code test.pug]
+        p=__("What would you say if I gave you {num} %s apple?", "What would you say if I gave you {num} %s apples?", apples.type, apples)
+        p=__("What would you say if I gave you {num} {type} pears?", "What would you say if I gave you {num} {type} pears?", pears)
