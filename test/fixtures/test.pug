@@ -10,11 +10,14 @@ html
     p Locale: "#{locale}"
     h2= __("Working with filters")
     p
-      :__ Fruits are often tasty.
+      :__
+        Fruits are often tasty.
     p
-      :__(vars=["Jim"]) %s's pears usually tasty.
+      :__(vars=["Jim"])
+        %s's pears usually tasty.
     p
-      :__mf(foo="Frank") {foo}'s apples are usually tasty too.
+      :__mf(foo="Frank")
+        {foo}'s apples are usually tasty too.
     p
       :__mf(vars=["Jim"], dude="Frank")
         Comparing %s's apples and {dude}'s pears is not fair.
