@@ -5,54 +5,77 @@ https://github.com/SnijderC/grunt-i18n-pug
 Copyright (c) 2017 Chris Snijder
 Licensed under the MIT license.
 ###
-
-'use strict';
-
+'use strict'
 module.exports = (grunt) ->
 
-    requirements = [
-        'grunt-contrib-pug'
-    ]
-
-    grunt.registerMultiTask 'i18n_pug', 'Wrapper for mashpie\'s i18n-node.', ->
-
-        missing_reqs = []
-        for requirement in requirements
+    grunt.registerMultiTask(
+        'i18n_pug',
+        'Wrapper for mashpie\'s i18n-node in grunt-contrib-pug.',
+        () ->
             try
-                require requirement
-                grunt.loadNpmTasks requirement
+                _ = require 'lodash'
+                i18n = require 'i18n'
+                grunt.loadNpmTasks 'grunt-contrib-pug'
             catch e
-                missing_reqs.push requirement
-        if missing_reqs.length
-            err = new Error(
-                'Dependencies are not installed: '+
-                missing_reqs.join(", ")
+                err = new Error(
+                    'Missing dependencies, need: lodash, node-i18n and'+
+                    'grunt-contrib-pug.'
+                )
+                err.origError = e
+                grunt.fail.warn err
+
+            if not 'i18n' of @options
+                err = new Error(
+                    'You need to configure an `i18n` object in your target'+
+                    ' options.'
+                )
+                grunt.fail.warn err
+
+            # Get raw config (unparsed configuration)
+            config = grunt.config.getRaw(
+                @name + if @target then "." + @target else ''
             )
-            err.origError = e;
-            grunt.fail.warn(err);
 
-    @requiresConfig ['pug', 'i18n']
+            # Find the i18n settings object in the options
+            i18nConfig = config.options.i18n
+            # Remove options not supported by grunt-contrib-pug
+            delete config.options.i18n
+            # Register __(), __n(), etc. in pugs data namespace
+            i18nConfig.register = config.options.data
+            # Configure i18n
+            i18n.configure i18nConfig
+            # See if we should rename the files to:
+            # [dest][filename]_[locale].[ext]
+            rename = config.options.rename ? 'dir'
+            delete config.options.rename if config.options.rename?
+            # Preserve any rename functions passed to the file object
+            if rename
+                callbacks = {}
+                for files, key in config.files
+                    if typeof config.files[key].rename is 'function'
+                        callbacks[key] = config.files[key].rename
+                    else
+                        callbacks[key] = (src, dest) ->
+                            "#{src}#{dest}"
 
-    # Merge task-specific and/or target-specific options for pug and i18n.
-    options = @options()
+            for locale in i18nConfig.locales
+                # Add a rename function to the files attribute of the task to
+                # add the locale in the name.
+                if rename
+                    for files, key in config.files
+                        do (files, key, locale) ->
+                            ext = files.ext
+                            config.files[key].rename = (src, dest) ->
+                                if rename == 'file'
+                                    dest = dest.slice(0,-ext.length)
+                                    dest += "_#{locale}#{ext}"
+                                else if rename == 'dir'
+                                    dest = "#{locale}/#{dest}"
+                                # Run callback if any
+                                return callbacks[key] src, dest
+                            config.options.data.setLocale(locale)
 
-    # Iterate over all specified file groups.
-    @files.forEach (f) ->
-      # Concat specified files.
-      src = f.src.filter((filepath) ->
-        # Warn on and remove invalid source files (if nonull was set).
-        if !grunt.file.exists(filepath)
-          grunt.log.warn 'Source file "' + filepath + '" not found.'
-          false
-        else
-          true
-      ).map((filepath) ->
-        # Read file source.
-        grunt.file.read filepath
-      ).join(grunt.util.normalizelf(options.separator))
-      # Handle options.
-      src += options.punctuation
-      # Write the destination file.
-      grunt.file.write f.dest, src
-      # Print a success message.
-      grunt.log.writeln 'File "' + f.dest + '" created.'
+                target = if @target then "#{@target}_#{locale}" else locale
+                grunt.config.set "pug.#{target}", _.cloneDeep(config)
+                grunt.task.run ["pug:#{target}"]
+    )

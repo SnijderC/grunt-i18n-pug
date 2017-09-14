@@ -1,0 +1,12 @@
+{
+	"What would you say if I gave you %s %%s apple?": {
+		"one": "What would you say if I gave you %s %%s apple?",
+		"other": "What would you say if I gave you %s %%s apples?"
+	},
+	"spoiled": "spoiled",
+	"What would you say if I gave you %s %%s pears?": {
+		"one": "What would you say if I gave you %s %%s pears?",
+		"other": "What would you say if I gave you %s %%s pears?"
+	},
+	"tasty": "tasty"
+}

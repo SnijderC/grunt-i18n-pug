@@ -36,7 +36,16 @@
     "gruntplugin"
   ],
   "dependencies": {
+    "grunt-coffee-jshint": "^1.0.0",
     "grunt-contrib-pug": "^1.0.0",
-    "i18n": "^0.8.3"
+    "i18n": "^0.8.3",
+    "js2coffee": "^2.2.0",
+    "lodash": "^4.17.4"
+  },
+  "coffeelintConfig": {
+    "indentation": {
+      "value": 4,
+      "level": "error"
+    }
   }
 }

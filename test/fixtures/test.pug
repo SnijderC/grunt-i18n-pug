@@ -5,5 +5,9 @@ html
         title Test page
     body
         h1 Localised versions of #[code test.pug]
-        p=__("What would you say if I gave you {num} %s apple?", "What would you say if I gave you {num} %s apples?", apples.type, apples)
-        p=__("What would you say if I gave you {num} {type} pears?", "What would you say if I gave you {num} {type} pears?", pears)
+        quote.
+            Let's talk about #{apples.num} #{apples.type} apple(s) and #{pears.num} #{pears.type} pear(s) in a way that makes more sense.
+        p Locale is "#{locale}"
+        p=__n("What would you say if I gave you %s %%s apple?", "What would you say if I gave you %s %%s apples?", apples.num, __(apples.type))
+        p=__n("What would you say if I gave you %s %%s pears?", "What would you say if I gave you %s %%s pears?", pears.num, __(pears.type))
+
