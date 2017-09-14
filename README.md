@@ -139,9 +139,9 @@ Instead do this:
 = __("I want to localise this %s string.", __(stringType))
 ```
 
-Now we will get this in the localisation file.
+Now we will get this in the localisation file:
 ``` json
-"I want to localise this %s string.": "I want to localise %s this string."
+"I want to localise this %s string.": "I want to localise this %s string."
 "simple": "simple"
 ""
 ```
