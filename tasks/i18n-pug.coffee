@@ -40,10 +40,6 @@ module.exports = (grunt) ->
             i18nConfig = config.options.i18n
             # Remove options not supported by grunt-contrib-pug
             delete config.options.i18n
-            # Register __(), __n(), etc. in pugs data namespace
-            i18nConfig.register = config.options.data
-            # Configure i18n
-            i18n.configure i18nConfig
             # See if we should rename the files to:
             # [dest][filename]_[locale].[ext]
             rename = config.options.rename ? 'dir'
@@ -59,13 +55,26 @@ module.exports = (grunt) ->
                             "#{src}#{dest}"
 
             for locale in i18nConfig.locales
+                # Make a duplicate of config (i.e. not byref)
+                _config = _.cloneDeep(config)
+                console.log _config.options.data
+                # Register __(), __n(), etc. in pugs data namespace
+                i18nConfig.register = _config.options.data
+                console.log _config.options.data
+                # Configure i18n
+                i18n.configure i18nConfig
+                console.log _config.options.data
+                # Set the locale
+                _config.options.data.setLocale(locale)
+                console.log _config.options.data
+
                 # Add a rename function to the files attribute of the task to
                 # add the locale in the name.
                 if rename
                     for files, key in config.files
                         do (files, key, locale) ->
                             ext = files.ext
-                            config.files[key].rename = (src, dest) ->
+                            _config.files[key].rename = (src, dest) ->
                                 if rename == 'file'
                                     dest = dest.slice(0,-ext.length)
                                     dest += "_#{locale}#{ext}"
@@ -73,9 +82,8 @@ module.exports = (grunt) ->
                                     dest = "#{locale}/#{dest}"
                                 # Run callback if any
                                 return callbacks[key] src, dest
-                            config.options.data.setLocale(locale)
 
                 target = if @target then "#{@target}_#{locale}" else locale
-                grunt.config.set "pug.#{target}", _.cloneDeep(config)
+                grunt.config.set "pug.#{target}", _config
                 grunt.task.run ["pug:#{target}"]
     )
