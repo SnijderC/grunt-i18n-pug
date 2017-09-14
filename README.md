@@ -119,26 +119,26 @@ You can nest calls to `__()` but you should not do this:
 ``` pug
 - var stringType = "simple";
 //- THIS IS BAD!
-= __(__("I want to localise %s this string."), stringType)
+= __(__("I want to localise this %s string."), stringType)
 ```
 
 Because it will lead to 2 similar strings in your localisation files:
 
 ``` json
-"I want to localise %s this string.": "I want to localise %s this string."
-"I want to localise simple this string.": "I want to localise simple this string."
+"I want to localise this %s string.": "I want to localise this %s string."
+"I want to localise this simple string.": "I want to localise this simple string."
 ```
 
 Instead do this:
 ``` pug
 - var stringType = "simple";
-//- THIS IS BAD!
-= __("I want to localise %s this string.", __(stringType))
+//- This is OK
+= __("I want to localise this %s string.", __(stringType))
 ```
 
 Now we will get this in the localisation file.
 ``` json
-"I want to localise %s this string.": "I want to localise %s this string."
+"I want to localise this %s string.": "I want to localise %s this string."
 "simple": "simple"
 ""
 ```
