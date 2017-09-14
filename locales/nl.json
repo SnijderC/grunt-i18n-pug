@@ -1,4 +1,21 @@
 {
+	"%s's pears usually tasty.": "%ss peren zijn meestal lekker.",
+	"{foo}'s apples are usually tasty too.": "{foo}s appels zijn meestal ook wel lekker.",
+	"Comparing %s's apples and {dude}'s pears is not fair.": "%ss appels vergelijken met {dude}s peren is niet eerlijk.",
+	"%s pear is just one..": {
+		"one": "%s peer is er maar een..",
+		"other": "%s peren is beter dan 1"
+	},
+	"%s pear is ok": {
+		"one": "%s peer is er maar een..",
+		"other": "%s peren is beter dan 1"
+	},
+	"Test page": "Test pagina",
+	"Localised versions of": "Gelocaliseerde versie van",
+	"Working with filters": "Werken met filters",
+	"Working with javascript functions": "Met javascript functies werken",
+	"Number of apples: ": "Aantal appels: ",
+	"Number of pears: ": "Aantal peren: ",
 	"tasty": "smakelijke",
 	"What would you say if I gave you %s %%s apple?": {
 		"one": "Wat zou je ervan vinden als ik je %s %%s appel gaf?",
@@ -8,5 +25,6 @@
 	"What would you say if I gave you %s %%s pears?": {
 		"one": "Wat zou je ervan vinden als ik je %s %%s peer gaf?",
 		"other": "Wat zou je ervan vinden als ik je %s %%s peren gaf?"
-	}
+	},
+	"Fruits are often tasty.": "Fruit is vaak lekker."
 }

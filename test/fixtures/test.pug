@@ -1,13 +1,35 @@
 doctype html
 html
-    head
-        meta(charset="utf-8")
-        title Test page
-    body
-        h1 Localised versions of #[code test.pug]
-        quote.
-            Let's talk about #{apples.num} #{apples.type} apple(s) and #{pears.num} #{pears.type} pear(s) in a way that makes more sense.
-        p Locale is "#{locale}"
-        p=__n("What would you say if I gave you %s %%s apple?", "What would you say if I gave you %s %%s apples?", apples.num, __(apples.type))
-        p=__n("What would you say if I gave you %s %%s pears?", "What would you say if I gave you %s %%s pears?", pears.num, __(pears.type))
+  head
+    meta(charset="utf-8")
+    title= __("Test page")
+  body
+    h1
+      = __("Localised versions of")
+      |  #[code test.pug]
+    p Locale: "#{locale}"
+    h2= __("Working with filters")
+    p
+      :__ Fruits are often tasty.
+    p
+      :__(vars=["Jim"]) %s's pears usually tasty.
+    p
+      :__mf(foo="Frank") {foo}'s apples are usually tasty too.
+    p
+      :__mf(vars=["Jim"], dude="Frank")
+        Comparing %s's apples and {dude}'s pears is not fair.
+    p
+      :__n(num=1)
+        %s pear is just one..
+        N: %s pears is better than 1
+    p
+      :__n(num=2)
+        %s pear is ok
+        N: %s pears is better than 1
+    h2= __("Working with javascript functions")
+    ul
+      li= __n("Number of apples: ") + apples.num
+      li= __n("Number of pears: ") + pears.num
+    p=__n("What would you say if I gave you %s %%s apple?", "What would you say if I gave you %s %%s apples?", apples.num, __(apples.type))
+    p=__n("What would you say if I gave you %s %%s pears?", "What would you say if I gave you %s %%s pears?", pears.num, __(pears.type))
 

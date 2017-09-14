@@ -11,13 +11,6 @@
 module.exports = (grunt) ->
     # Project configuration.
     grunt.initConfig
-        coffee_jshint:
-            all: [
-                'Gruntfile.coffee'
-                'tasks/*.coffee'
-                '<%= nodeunit.tests %>'
-            ]
-            options: jshintrc: '.jshintrc'
         clean:
             tests:
                 [
@@ -41,6 +34,9 @@ module.exports = (grunt) ->
                         pears:
                             type: 'spoiled'
                             num: 5
+                        pug_mixins:
+                            yo: (args) ->
+                                "yo mama"
 
                     i18n:
                         locales: ['en', 'nl']
@@ -48,6 +44,7 @@ module.exports = (grunt) ->
                             #nl: 'en'
                         directory: './locales/'
                         syncFiles: true
+                        updateFiles: true
         nodeunit:
             tests:
                 [
@@ -68,6 +65,5 @@ module.exports = (grunt) ->
     ]
     # By default, lint and run all tests.
     grunt.registerTask 'default', [
-        'coffee_jshint'
         'i18n_pug'
     ]
