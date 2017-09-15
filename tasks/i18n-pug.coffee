@@ -23,14 +23,16 @@ module.exports = (grunt) -> grunt.registerMultiTask(
             err.origError = e
             grunt.fail.warn err
 
-        if not 'i18n' of @options
+        config = {}
+        config.options = @options()
+
+        if not config.options.i18n?
             err = new Error(
                 'You need to configure an `i18n` object in your target'+
                 ' options. See here: https://github.com/SnijderC/'+
                 'grunt-i18n-pug/blob/master/README.md'
             )
             grunt.fail.fatal err
-
 
         gettextFilter = (context) ->
             (text, options) ->
@@ -63,11 +65,10 @@ module.exports = (grunt) -> grunt.registerMultiTask(
                 return context.__mf(text)
 
         # Get raw config (unparsed configuration)
-        config = grunt.config.getRaw(
+        config.files = grunt.config.getRaw(
             # Most commonly `i18n_pug.[target]` or `i18n_pug`
             if @target.length then "#{@name}.#{@target}" else @name
-        )
-
+        ).files
         # Find the i18n settings object in the options and preserve it
         i18nConfig = config.options.i18n
         # Remove options not supported by grunt-contrib-pug from config
@@ -91,12 +92,29 @@ module.exports = (grunt) -> grunt.registerMultiTask(
         for locale in i18nConfig.locales
             # Make a duplicate of config (i.e. not byref)
             _config = _.cloneDeep(config)
+            _config.options._i18n = {}
             # Register __(), __n(), etc. in pugs data namespace
-            i18nConfig.register = _config.options.data
+            i18nConfig.register = _config.options._i18n
             # Configure i18n
             i18n.configure i18nConfig
             # Set the locale
-            _config.options.data.setLocale(locale)
+            _config.options._i18n.setLocale locale
+            if typeof _config.options.data != 'function'
+                _.assign(_config.options.data, _config.options._i18n)
+                delete _config.options._i18n
+            else
+                data_callback = _config.options.data
+
+                _config.options.data = (
+                    (data_obj) ->
+                        (src, dest) ->
+                            data = data_callback(src, dest)
+                            _.assign(data, data_obj._i18n)
+                            delete data_obj._i18n
+                            console.log data_obj
+                            console.log(data)
+                            data
+                )(_config.options)
 
             # add a gettext filter
             _config.options.filters = {
@@ -120,7 +138,6 @@ module.exports = (grunt) -> grunt.registerMultiTask(
                                 dest = "#{locale}/#{dest}"
                             # Run callback if any
                             return callbacks[key] src, dest
-
             target = if @target then "#{@target}_#{locale}" else locale
             grunt.config.set "pug.#{target}", _config
             grunt.task.run ["pug:#{target}"]
