@@ -6,7 +6,6 @@ Copyright (c) 2017 Chris Snijder
 Licensed under the MIT license.
 ###
 'use strict'
-
 module.exports = (grunt) -> grunt.registerMultiTask(
     'i18n_pug',
     'Wrapper for mashpie\'s i18n-node in grunt-contrib-pug.',
@@ -34,12 +33,23 @@ module.exports = (grunt) -> grunt.registerMultiTask(
             )
             grunt.fail.fatal err
 
+        escapeSignificantChars = (data, reverse=false) ->
+            if !reverse
+                data.replace(/\|/g, '%%PIPE%%')
+            else
+                data.replace('%%PIPE%%', '|')
+
         gettextFilter = (context) ->
-            (text, options) ->
+            (text, options, noEscape=false) ->
+                if !noEscape
+                    text = escapeSignificantChars(text)
                 if options.vars?
-                    context.__(text, options.vars...)
+                    data = context.__(text, options.vars...)
                 else
-                    context.__(text)
+                    data = context.__(text)
+                if !noEscape
+                    data = escapeSignificantChars(data, true)
+                data
 
         gettextFilterN = (context) ->
             (text, options) ->
@@ -50,8 +60,8 @@ module.exports = (grunt) -> grunt.registerMultiTask(
                 else
                     text = text.replace(/\n/g, "\\n")
                     grunt.fail.warn(
-                        "Filter input \"#{text}\" in file #{options.filename}" +
-                        " is formatted incorrectly."
+                        "Filter input \"#{text}\" in file " +
+                        "#{options.filename} is formatted incorrectly."
                     )
 
         gettextFilterMf = (context) ->
@@ -78,6 +88,7 @@ module.exports = (grunt) -> grunt.registerMultiTask(
         #  - [dest]/[locale]/[filename].[ext] - or
         rename = config.options.rename ? 'dir'
         delete config.options.rename if config.options.rename?
+
         # Preserve any rename functions passed to the file object
         if rename
             callbacks = {}
@@ -111,17 +122,14 @@ module.exports = (grunt) -> grunt.registerMultiTask(
                             data = data_callback(src, dest)
                             _.assign(data, data_obj._i18n)
                             delete data_obj._i18n
-                            console.log data_obj
-                            console.log(data)
                             data
                 )(_config.options)
 
             # add a gettext filter
-            _config.options.filters = {
+            _.assign _config.options.filters, {
                 __: gettextFilter _config.options.data
                 __n: gettextFilterN _config.options.data
                 __mf: gettextFilterMf _config.options.data
-
             }
 
             # Add a rename function to the files attribute of the task to
@@ -147,4 +155,5 @@ module.exports = (grunt) -> grunt.registerMultiTask(
         grunt.log.ok (
             "Added #{tasks} grunt-contrib-pug #{ptasks}."
         )
+
 )
