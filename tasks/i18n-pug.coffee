@@ -79,6 +79,11 @@ module.exports = (grunt) -> grunt.registerMultiTask(
             # Most commonly `i18n_pug.[target]` or `i18n_pug`
             if @target.length then "#{@name}.#{@target}" else @name
         ).files
+
+        # Set files[n].orig for each files object
+        for file_obj, key in config.files
+            config.files[key] = file_obj.orig
+
         # Find the i18n settings object in the options and preserve it
         i18nConfig = config.options.i18n
         # Remove options not supported by grunt-contrib-pug from config
