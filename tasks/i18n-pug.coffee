@@ -82,7 +82,7 @@ module.exports = (grunt) -> grunt.registerMultiTask(
 
         # Set files[n].orig for each files object
         for file_obj, key in config.files
-            config.files[key] = file_obj.orig
+            config.files[key] = file_obj.orig || file_obj
 
         # Find the i18n settings object in the options and preserve it
         i18nConfig = config.options.i18n
@@ -98,12 +98,11 @@ module.exports = (grunt) -> grunt.registerMultiTask(
         if rename
             callbacks = {}
             for files, key in config.files
-                if typeof config.files[key].rename is 'function'
-                    callbacks[key] = config.files[key].rename
-                else
-                    callbacks[key] = (src, dest) ->
-                        "#{src}#{dest}"
-
+                callbacks[key] = (src, dest) ->
+                    "#{src}#{dest}"
+                if config.files[key].rename?
+                    if typeof config.files[key].rename is 'function'
+                        callbacks[key] = config.files[key].rename
         tasks = 0
         for locale in i18nConfig.locales
             # Make a duplicate of config (i.e. not byref)
@@ -131,6 +130,7 @@ module.exports = (grunt) -> grunt.registerMultiTask(
                 )(_config.options)
 
             # add a gettext filter
+            _config.options.filters ?= {}
             _.assign _config.options.filters, {
                 __: gettextFilter _config.options.data
                 __n: gettextFilterN _config.options.data
