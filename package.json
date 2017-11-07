@@ -36,7 +36,7 @@
   ],
   "dependencies": {
     "grunt-contrib-pug": "^1.0.0",
-    "i18n": "^0.8.3",
+    "i18n": "jun85664396/i18n-node",
     "lodash": "^4.17.4",
     "yamljs": "^0.3.0"
   },
