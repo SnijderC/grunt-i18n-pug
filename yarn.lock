@@ -892,14 +892,15 @@ http-signature@~1.1.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
-i18n@^0.8.3:
+i18n@jun85664396/i18n-node:
   version "0.8.3"
-  resolved "https://registry.yarnpkg.com/i18n/-/i18n-0.8.3.tgz#2d8cf1c24722602c2041d01ba6ae5eaa51388f0e"
+  resolved "https://codeload.github.com/jun85664396/i18n-node/tar.gz/ca1d7f50640d1b1863abfc2542bddb350c1daa7d"
   dependencies:
     debug "*"
-    make-plural "^3.0.3"
+    js-yaml "^3.10.0"
+    make-plural "^4"
     math-interval-parser "^1.1.0"
-    messageformat "^0.3.1"
+    messageformat "^0"
     mustache "*"
     sprintf-js ">=1.0.3"
 
@@ -1150,7 +1151,7 @@ js-yaml@3.6.1:
     argparse "^1.0.7"
     esprima "^2.6.0"
 
-js-yaml@^3.2.7, js-yaml@^3.3.1:
+js-yaml@^3.10.0, js-yaml@^3.2.7, js-yaml@^3.3.1:
   version "3.10.0"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.10.0.tgz#2e78441646bd4682e963f22b6e92823c309c62dc"
   dependencies:
@@ -1289,7 +1290,13 @@ lru-cache@^4.0.1:
     pseudomap "^1.0.2"
     yallist "^2.1.2"
 
-make-plural@^3.0.3, make-plural@~3.0.3:
+make-plural@^4:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/make-plural/-/make-plural-4.0.1.tgz#be9cb73f54341a0289699b6abf643973d3bedd53"
+  optionalDependencies:
+    minimist "^1.2.0"
+
+make-plural@~3.0.3:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/make-plural/-/make-plural-3.0.6.tgz#2033a03bac290b8f3bb91258f65b9df7e8b01ca7"
   optionalDependencies:
@@ -1323,7 +1330,7 @@ merge-source-map@^1.0.2:
   dependencies:
     source-map "^0.5.6"
 
-messageformat@^0.3.1:
+messageformat@^0:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/messageformat/-/messageformat-0.3.1.tgz#e58fff8245e9b3971799e5b43db58b3e9417f5a2"
   dependencies:

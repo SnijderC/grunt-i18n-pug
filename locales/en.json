@@ -1,4 +1,5 @@
 {
+	"Fruits are often tasty.": "Fruits are often tasty.",
 	"%s's pears usually tasty.": "%s's pears usually tasty.",
 	"{foo}'s apples are usually tasty too.": "{foo}'s apples are usually tasty too.",
 	"Comparing %s's apples and {dude}'s pears is not fair.": "Comparing %s's apples and {dude}'s pears is not fair.",
@@ -25,6 +26,5 @@
 	"What would you say if I gave you %s %%s pears?": {
 		"one": "What would you say if I gave you %s %%s pears?",
 		"other": "What would you say if I gave you %s %%s pears?"
-	},
-	"Fruits are often tasty.": "Fruits are often tasty."
+	}
 }
