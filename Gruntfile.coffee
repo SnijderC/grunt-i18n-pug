@@ -44,6 +44,7 @@ module.exports = (grunt) ->
             directory: './locales/'
             syncFiles: true
             updateFiles: true
+            extension: ".yml"
     nodeunit:
       tests:
         [
